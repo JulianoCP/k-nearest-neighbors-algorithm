@@ -1,10 +1,8 @@
 import math  
 from random import shuffle 
 
-global vetorDistance
-vetorDistance = [20]
 global vetorClasses
-vetorClasses = [20]
+vetorClasses = []
 
 def readDataFun(fileName): 
   
@@ -28,54 +26,30 @@ def EuclideanDistance(x,y):
     for i in range(0,(len(a)-1)):
         distance += math.pow(float(a[i]) - float(b[i]),2) 
 
-    return math.sqrt(distance)
+    return (math.sqrt(distance), y[-1])
 
 
 
 def classify(feature,k,training):
-
+    global vetorClasses
+    distancias = []
     for i in training:
-        distance = EuclideanDistance(feature,i)
-        neighbors(distance,i[-1],k)
+        distancias.append(EuclideanDistance(feature,i))
+    distancias.sort()    
+
+    for i in range(0,k):
+        vetorClasses[int(distancias[i][1])] += 1
     
-    classe = qtdNeighbors(k)
+    maior = 0
+    for i in range(len(vetorClasses)):
+        if vetorClasses[i] >= vetorClasses[maior]:
+            maior = i
+    clearArray()        
+    return maior
 
-    return classe;
-
-def qtdNeighbors(k):
-    global vetorClasses
-
-    vet = []
-    for i in range(0,10):
-        vet.append(0)
-
-    for i in range(0,k):
-        for j in range(0,10):
-            if int(vetorClasses[i]) == j:
-                vet[j] += 1
-
-    max = 0
-    for i in range(0,10):
-        if vet[i] >= vet[max]:
-            max = i
-
-    return float(max)
-
-def neighbors(distance,classe,k):
-    global vetorDistance
-    global vetorClasses
-
-        
-
-    for i in range(0,k):
-        if distance < vetorDistance[i]:
-            tmp = vetorDistance[i]
-            vetorDistance[i] = distance
-            distance = tmp
-            tp = vetorClasses[i]
-            vetorClasses[i] = classe
-            classe = tp
-            vetorDistance.sort()
+def clearArray():
+    for i in range(len(vetorClasses)):
+        vetorClasses[i] = 0
 
     
 
@@ -108,15 +82,14 @@ def accuracyFun(k,data,iterations):
   
     
 def main():
-    global vetorDistance
     global vetorClasses
 
-    for i in range(0,4):
-        vetorClasses.append(1)
-        vetorDistance.append(1)
+    for i in range(0,10):
+        vetorClasses.append(0)
 
     data = readDataFun('treinamento.txt')
-    accuracyFun(5,data,10)
+
+    accuracyFun(5,data,700)
   
 if __name__ == '__main__': 
     main() 
