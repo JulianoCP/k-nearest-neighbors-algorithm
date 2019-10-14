@@ -76,7 +76,7 @@ def FoldsFun(k,data,iterations):
             matrix[int(itemClass)][int(deduction)] += 1
 
     print("")
-    print("------Matrix de Confusão------")
+    print("------Matriz de Confusão------")
     print(" 0  1  2  3  4  5  6  7  8  9  = LABEL")
     for i in range(0,10):
         print(matrix[i], end="")
