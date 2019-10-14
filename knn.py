@@ -1,5 +1,6 @@
 import math  
 from random import shuffle 
+from random import randint
 
 global vetorClasses
 vetorClasses = []
@@ -102,8 +103,28 @@ def main():
 
     print("Digite um valor para [K]:", end="")
     k = input()
-    print("Digite um valor para [Folds]:", end="")
-    folds = input()
+
+    print("\n[1] você escolher o folds [2] aleatorio entre 25%,50%,75%:", end="")
+    tmp = input()
+
+    if(int(tmp) == 1):
+        print("Digite um valor para [Folds]:", end="")
+        folds = input()
+    else:
+        tmp = (randint(0,100))
+
+        if(tmp < 33):
+            var = 25
+            folds = (25 * len(data))/100
+        elif(33 < tmp < 66):
+            var = 50
+            folds = (50 * len(data))/100
+        elif(66 < tmp):
+            var = 75
+            folds = (75 * len(data))/100
+
+        print("Porcentagem escolhida: %d" % var, end="")
+        print("%")
 
     for i in range(0,10):
         vetorClasses.append(0)
