@@ -4,6 +4,8 @@ from random import shuffle
 global vetorClasses
 vetorClasses = []
 
+
+#Função que le o arquivo.
 def readDataFun(fileName): 
   
     data = [] 
@@ -17,6 +19,7 @@ def readDataFun(fileName):
 
     return data 
 
+#Função que calcula a distância euclidiana dos pontos.
 def EuclideanDistance(x,y):
     distance = 0
 
@@ -28,8 +31,7 @@ def EuclideanDistance(x,y):
 
     return (math.sqrt(distance), y[-1])
 
-
-
+#Função de classificação.
 def classify(feature,k,training):
     global vetorClasses
     distancias = []
@@ -47,15 +49,16 @@ def classify(feature,k,training):
     clearArray()        
     return maior
 
+#Função que limpa o vetor de classes.
 def clearArray():
     for i in range(len(vetorClasses)):
         vetorClasses[i] = 0
 
-    
-
+#Função que separa treino e teste.
 def FoldsFun(k,data,iterations):
     corrects = 0.0
     total = len(data)
+    matrix = [[0 for x in range(10)] for y in range(10)] 
 
     training = data[iterations:len(data)]
     test = data[0:iterations]
@@ -68,28 +71,44 @@ def FoldsFun(k,data,iterations):
 
         if(float(deduction) == float(itemClass)):
             corrects += 1
+            matrix[int(itemClass)][int(deduction)] += 1
+        else:
+            matrix[int(itemClass)][int(deduction)] += 1
 
+    print("")
+    print("------Matrix de Confusão------")
+    print(" 0  1  2  3  4  5  6  7  8  9  = LABEL")
+    for i in range(0,10):
+        print(matrix[i], end="")
+        print(" =",i)
+    print("")
+        
     accuracy = corrects / iterations
     return accuracy
 
+#Função que devolve a porcentagem de acerto.
 def accuracyFun(k,data,iterations):
     accuracy = 0.0
     shuffle(data)
 
     accuracy = FoldsFun(k, data,iterations)
-
     print("Accuracy: %f" % accuracy)
   
-    
+#Função main.
 def main():
     global vetorClasses
+
+    data = readDataFun('treinamento.txt')
+
+    print("Digite um valor para [K]:", end="")
+    k = input()
+    print("Digite um valor para [Folds]:", end="")
+    folds = input()
 
     for i in range(0,10):
         vetorClasses.append(0)
 
-    data = readDataFun('treinamento.txt')
-
-    accuracyFun(5,data,700)
+    accuracyFun(int(k),data,int(folds))
   
 if __name__ == '__main__': 
     main() 
